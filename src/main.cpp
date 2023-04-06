@@ -186,12 +186,15 @@ TEMPLATE_TEST_CASE(
         meter.measure([&] { boost::sort::sample_sort(std::begin(data), std::end(data)); });
     };
 
-    // Disabled due to error "malloc(): largebin double linked list corrupted (nextsize)" with Boost 1.74 and 1000000 std::string items in the test vector.
-    // BENCHMARK_ADVANCED("boost::sort::parallel_stable_sort " + str_size)(Catch::Benchmark::Chronometer meter)
-    // {
-    //     auto data = generate_test_vector<TestType>(size);
-    //     meter.measure([&] { boost::sort::parallel_stable_sort(std::begin(data), std::end(data)); });
-    // };
+    if constexpr (!std::is_same_v<TestType, std::string>)
+    {
+        // This benchmark fails with SIGSEGV in case with std::string and array size of 1000000  
+        BENCHMARK_ADVANCED("boost::sort::parallel_stable_sort " + str_size)(Catch::Benchmark::Chronometer meter)
+        {
+            auto data = generate_test_vector<TestType>(size);
+            meter.measure([&] { boost::sort::parallel_stable_sort(std::begin(data), std::end(data)); });
+        };
+    }
 }
 
 int main(int argc, char* argv[])

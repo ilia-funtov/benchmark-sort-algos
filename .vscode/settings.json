@@ -60,6 +60,6 @@
         "utility": "cpp",
         "variant": "cpp"
     },
-    "C_Cpp.errorSquiggles": "disabled",
+    "C_Cpp.errorSquiggles": "enabled",
     "cmake.buildDirectory": "${workspaceRoot}/build/${buildKit}/${buildType}",
 }
